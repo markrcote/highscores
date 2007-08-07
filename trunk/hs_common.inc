@@ -1,6 +1,6 @@
 <?php
-$username = "mcote";
-$password = "Str%06";
+$username = "";
+$password = "";
 $database = "highscores";
 
 function load_array($table, $field, &$array)
