@@ -16,7 +16,7 @@ $query = "SELECT * FROM `players` WHERE `id`='$player'";
 $result = mysql_query($query) or die (mysql_error());
 $player_name = utf8_encode(mysql_result($result, 0, 'name'));
 
-$query = "SELECT * FROM `matches`";
+$query = "SELECT * FROM `matches` ORDER BY `date`";
 $matches_result = mysql_query($query) or die(mysql_error());
 $num_matches = mysql_numrows($matches_result);
 
@@ -26,6 +26,8 @@ if (!$num_matches) die ("No matches played");
 $total_wins = 0;
 $total_draws = 0;
 $total_losses = 0;
+
+$gnuplot_file = fopen("/tmp/plotdata", "w");
 
 for ($i = 0; $i < $num_matches; $i++)
 {
@@ -75,6 +77,15 @@ for ($i = 0; $i < $num_matches; $i++)
             $wins[$game_num]++;
         }
     }
+
+    if ($total_wins + $total_losses)
+        $wl_ratio = $total_wins / ($total_wins + $total_losses) * 100;
+    else
+        $wl_ratio = 0;
+
+    fwrite($gnuplot_file, mysql_result($matches_result, $i, 'date') . " " .
+           $wl_ratio . "\n");
+
 }
 
 $best_games = array();
@@ -100,15 +111,19 @@ if ($total_wins || $total_draws)
 
 mysql_close();
 
+$plot_results = system("gnuplot /var/www/hs.gp", $retvar);
+
 echo "<h3>Stats for $player_name</h3>";
-echo "<p><table><tr><td>Wins:</td><td>$total_wins</td></tr>",
+echo "<p><table><tr><td>";
+echo "<table><tr><td>Wins:</td><td>$total_wins</td></tr>",
      "<tr><td>Draws:</td><td>$total_draws</td></tr>",
      "<tr><td>Losses:</td><td>$total_losses</td></tr>";
-
 echo "<tr><td>Best game", count($best_games) > 1 ? "s" : "",
      " by number of wins:</td><td>", join(', ', $best_games), "</td></tr>";
-
-echo "</table></p>";
+echo "</table>";
+echo "</td><td>";
+echo "$plot_results<br>$retvar<br><img src=\"/hs.png\">";
+echo "</td></tr></table></p>";
 
 back_button();
 
