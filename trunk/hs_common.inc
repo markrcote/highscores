@@ -1,7 +1,7 @@
 <?php
 $username = "";
 $password = "";
-$database = "highscores";
+$database = "hs_test";
 
 function load_array($table, $field, &$array)
 {
@@ -50,4 +50,18 @@ function match_results($match_num, &$winners, &$losers, &$winning_score)
 
     $losers = array_diff($players, $winners);
 }
+
+// Load arrays into javascript.
+function js_arrays($num_players, &$players, $num_games, &$games)
+{
+    echo "var num_players = $num_players;\n";
+    echo "var num_games = $num_games;\n";
+    echo "var players = new Array($num_players);\n";
+    echo "var games = new Array($num_games);\n";
+    for ($i = 1; $i <= $num_players; $i++)
+        echo "players[$i] = \"", $players[$i], "\";\n";
+    for ($i = 1; $i <= $num_games; $i++)
+        echo "games[$i] = \"", $games[$i], "\";\n";
+}
+
 ?>
