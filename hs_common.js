@@ -1,13 +1,30 @@
+function createOptions(select, array, num)
+{
+    var select_idx = 0;
+    var array_idx = 1;
+
+    while (select_idx < num)
+    {
+        if (array[array_idx])
+        {
+            select.options[select_idx] = new Option(array[array_idx],
+                                                    array_idx, false);
+            select_idx++;
+        }
+        array_idx++;
+    }
+}
+
+
 function createSelect(form, row_name, array, num)
 {
     var select = document.createElement("select");
     select.setAttribute("name", row_name);
+    select.setAttribute("id", row_name);
 
-    for (var i = 0; i < num; i++)
-        select.options[i] = new Option(array[i+1], i+1, false);
-    
-    var p = document.createElement("p");
+    createOptions(select, array, num);
+
     form = document.getElementById(form);
-    form.appendChild(p);
     form.appendChild(select);
+    return select;
 }

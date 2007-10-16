@@ -1,5 +1,3 @@
-<html>
-<body>
 <?php
 include 'hs_common.inc';
 
@@ -72,8 +70,5 @@ echo "<tr><td>Worst player", count($worst_players) > 1 ? "s" : "",
      " by number of losses:</td><td>", join(', ', $worst_players),
      "</td></tr>";
 echo "</table></p>";
-
-back_button();
 ?>
-</body>
-</html>
+
