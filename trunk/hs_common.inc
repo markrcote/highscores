@@ -1,7 +1,7 @@
 <?php
-$username = "mcote";
-$password = "E^bLL0";
-$database = "highscores";
+$username = "";
+$password = "";
+$database = "";
 //$database = "hs_test";
 
 function load_array($table, $field, &$array)
