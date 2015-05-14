@@ -1,0 +1,1 @@
+A simple system to track and analyze the results of arbitrary games.
